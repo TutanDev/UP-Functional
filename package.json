@@ -1,0 +1,17 @@
+{
+    "name": "com.tutandev.functional",
+    "version": "1.0.0",
+    "displayName": "Functional",
+    "description": "Functional types and helpers",
+    "unity": "2021.1",
+    "unityRelease": "",
+    "documentationUrl": "",
+    "changelogUrl": "",
+    "licensesUrl": "",
+    "keywords": [],
+    "author": {
+        "name": "TutanDev",
+        "email": "andrespino.95@gmail.com",
+        "url": "https://google.com"
+    }
+}
