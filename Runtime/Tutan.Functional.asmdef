@@ -1,13 +1,13 @@
 {
-    "name": "TD.Functional",
-    "rootNamespace": "TD.Functional",
+    "name": "Tutan.Functional",
+    "rootNamespace": "Tutan.Functional",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

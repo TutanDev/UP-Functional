@@ -1,17 +1,14 @@
 {
-    "name": "com.tutandev.functional",
-    "version": "1.0.0",
-    "displayName": "Functional",
-    "description": "Functional types and helpers",
-    "unity": "2021.1",
-    "unityRelease": "",
-    "documentationUrl": "",
-    "changelogUrl": "",
-    "licensesUrl": "",
-    "keywords": [],
-    "author": {
-        "name": "TutanDev",
-        "email": "andrespino.95@gmail.com",
-        "url": "https://google.com"
-    }
+  "name": "com.tutan.functional",
+  "displayName": "Functional",
+  "version": "0.1.0",
+  "unity": "6000.1",
+  "unityRelease": "8f1",
+  "description": "A lightweight functional programming library for Unity providing Optional<T>, Result<T>, and composable extension methods.",
+  "dependencies": {},
+  "author": {
+    "name": "TutanDev",
+    "url": "https://github.com/TutanDev/com.tutan.functional",
+    "email": "andrespino.95@gmail.com"
+  }
 }
