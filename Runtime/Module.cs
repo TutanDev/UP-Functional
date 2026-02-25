@@ -1,5 +1,6 @@
 global using static Tutan.Functional.F;
 global using Unit = System.ValueTuple;
+global using Result = Tutan.Functional.Result<System.ValueTuple>;
 
 using System;
 using System.Collections.Generic;

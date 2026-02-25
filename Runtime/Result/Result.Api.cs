@@ -21,6 +21,10 @@ namespace Tutan.Functional
             => result.Match(_ => fallback, t => t);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T OrElse<T>(this Result<T> result, Func<T> fallback)
+            => result.Match(e => fallback(), t => t);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T OrElse<T>(this Result<T> result, Func<Error, T> fallback)
             => result.Match(e => fallback(e), t => t);
 

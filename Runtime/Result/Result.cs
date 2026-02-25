@@ -6,6 +6,9 @@ namespace Tutan.Functional
     public static partial class F
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Result<Unit> Success() => new(Unit());
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Result<T> Success<T>(T value)
         {
             if (typeof(T).IsValueType)
