@@ -84,6 +84,29 @@ public class SpawnPointResolver : MonoBehaviour
 }
 ```
 
+## 4) Save data read
+
+```csharp
+using Tutan.Functional;
+using static Tutan.Functional.F;
+
+public static class SaveReader
+{
+    public static Optional<int> TryReadLevel(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return None;
+
+        return int.TryParse(raw, out var level)
+            ? Some(level)
+            : None;
+    }
+}
+
+// Usage
+// int levelToLoad = SaveReader.TryReadLevel(playerPrefsValue).Or(1);
+```
+
 ## Practical guidance
 
 - Use `Optional<T>` for values that are truly optional (component may be absent, save field may be unset, query may return nothing).
