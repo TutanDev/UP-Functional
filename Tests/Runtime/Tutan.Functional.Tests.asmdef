@@ -3,6 +3,7 @@
     "rootNamespace": "Tutan.Functional.Tests",
     "references": [
         "Tutan.Functional",
+        "UniTask",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
