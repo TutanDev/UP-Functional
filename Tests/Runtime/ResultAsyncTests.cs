@@ -16,7 +16,7 @@ namespace Tutan.Functional.Tests
         {
             var result = await TryAsync(() => UniTask.FromResult(42));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(42));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(42));
         }
 
         [Test]
@@ -24,7 +24,7 @@ namespace Tutan.Functional.Tests
         {
             var result = await TryAsync<int>(() => throw new InvalidOperationException("boom"));
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("boom"));
+            StringAssert.Contains("boom", result.ErrorUnsafe().Message);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Tutan.Functional.Tests
         {
             var result = await TryAsync(() => throw new Exception("fail"));
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("fail"));
+            StringAssert.Contains("fail", result.ErrorUnsafe().Message);
         }
 
 
@@ -50,7 +50,7 @@ namespace Tutan.Functional.Tests
         {
             var result = await Success(5).MapAsync(x => UniTask.FromResult(x * 2));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(10));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(10));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace Tutan.Functional.Tests
             Result<int> src = Error("err");
             var result = await src.MapAsync(x => UniTask.FromResult(x * 2));
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("err"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("err"));
         }
 
 
@@ -70,7 +70,7 @@ namespace Tutan.Functional.Tests
         {
             var result = await UniTask.FromResult(Success(3)).Map(x => x + 1);
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(4));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(4));
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(7))
                 .MapAsync(x => UniTask.FromResult(x.ToString()));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo("7"));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo("7"));
         }
 
 
@@ -102,7 +102,7 @@ namespace Tutan.Functional.Tests
             var result = await Success(4)
                 .BindAsync(x => UniTask.FromResult(Success(x * 3)));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(12));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(12));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Tutan.Functional.Tests
             var result = await Success(4)
                 .BindAsync<int, int>(x => UniTask.FromResult((Result<int>)Error("inner")));
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("inner"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("inner"));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace Tutan.Functional.Tests
             Result<int> src = Error("outer");
             var result = await src.BindAsync(x => UniTask.FromResult(Success(x)));
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("outer"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("outer"));
         }
 
 
@@ -132,7 +132,7 @@ namespace Tutan.Functional.Tests
             var result = await Success(10)
                 .ThenAsync(x => UniTask.FromResult(x + 5));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(15));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(15));
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace Tutan.Functional.Tests
             var result = await Success(10)
                 .ThenAsync(x => UniTask.FromResult(Success(x.ToString())));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo("10"));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo("10"));
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace Tutan.Functional.Tests
                 .ThenAsync(x => { captured = x; return UniTask.CompletedTask; });
             Assert.That(captured, Is.EqualTo(99));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(99));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(99));
         }
 
         [Test]
@@ -171,7 +171,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(6))
                 .Then(x => x * 7);
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(42));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(42));
         }
 
         [Test]
@@ -180,7 +180,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(3))
                 .Then(x => Success(x + 1));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(4));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(4));
         }
 
         [Test]
@@ -190,7 +190,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(5))
                 .Then(x => { captured = x; });
             Assert.That(captured, Is.EqualTo(5));
-            Assert.That(result.ValueUnsafe, Is.EqualTo(5));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(5));
         }
 
         [Test]
@@ -199,7 +199,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(2))
                 .ThenAsync(x => UniTask.FromResult(x * 10));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(20));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(20));
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(5))
                 .ThenAsync(x => UniTask.FromResult(Success(x - 1)));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(4));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(4));
         }
 
         [Test]
@@ -218,7 +218,7 @@ namespace Tutan.Functional.Tests
             var result = await UniTask.FromResult(Success(8))
                 .ThenAsync(x => { captured = x; return UniTask.CompletedTask; });
             Assert.That(captured, Is.EqualTo(8));
-            Assert.That(result.ValueUnsafe, Is.EqualTo(8));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(8));
         }
 
 
@@ -310,7 +310,7 @@ namespace Tutan.Functional.Tests
                 .Match(onError: e => e.Message, onSuccess: v => "ok");
 
             Assert.That(step2Called, Is.False);
-            Assert.That(output, Is.EqualTo("fail"));
+            StringAssert.Contains("fail", output);
         }
     }
 }

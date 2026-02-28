@@ -38,10 +38,12 @@ namespace Tutan.Functional
             }
         }
 
-        // RETURN
+        // ── Return ──────────────────────────────────────────────
+
         public static Func<T, IEnumerable<T>> Return<T>() => t => List(t);
 
-        // MAP
+        // ── Map ────────────────────────────────────────────────
+
         public static IEnumerable<R> Map<T, R>
             (this IEnumerable<T> list, Func<T, R> func)
             => list.Select(func);
@@ -54,11 +56,13 @@ namespace Tutan.Functional
             (this IEnumerable<T1> opt, Func<T1, T2, T3, R> func)
             => opt.Map(func.Curry());
 
-        // FOREACH
+        // ── ForEach ─────────────────────────────────────────────
+
         public static IEnumerable<Unit> ForEach<T>(this IEnumerable<T> ts, Action<T> action)
             => ts.Map(action.ToFunc());
 
-        // BIND
+        // ── Bind ───────────────────────────────────────────────
+
         public static IEnumerable<R> Bind<T, R>
             (this IEnumerable<T> list, Func<T, IEnumerable<R>> func)
             => list.SelectMany(func);

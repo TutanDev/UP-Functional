@@ -25,24 +25,28 @@ namespace Tutan.Functional
     public readonly record struct Optional<T>
     {
         internal readonly T _value;
+        private readonly bool _isSome;
 
+        public bool IsSome => _isSome;
+        public bool IsNone => !_isSome;
 
-        public bool IsSome { get; init; }
-        public bool IsNone => !IsSome;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal Optional(T value) => (_isSome, _value) = (true, value);
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal Optional(T value) => (IsSome, _value) = (true, value);
-
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public R Match<R>(Func<R> onNone, Func<T, R> onSome) => IsSome ? onSome(_value) : onNone();
+        public R Match<R>(Func<R> onNone, Func<T, R> onSome) => _isSome ? onSome(_value) : onNone();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Unit Match(Action onNone, Action<T> onSome) => Match(onNone.ToFunc(), onSome.ToFunc());
+        public Unit Match(Action onNone, Action<T> onSome)
+        {
+            if (_isSome) onSome(_value);
+            else onNone();
+            return default;
+        }
 
 
-        public override string ToString() => IsSome ? $"Some: {_value}" : "None";
+        public override string ToString() => _isSome ? $"Some: {_value}" : "None";
         public static implicit operator Optional<T>(T value) => Some(value);
         public static implicit operator Optional<T>(NoneType _) => default;
     }

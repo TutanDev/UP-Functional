@@ -32,7 +32,7 @@ namespace Tutan.Functional.Tests
             Error composite = Error((IEnumerable<Error>)inner);
 
             Assert.AreEqual("first; second", composite.Message);
-            Assert.AreEqual(2, composite.InnerErrors.Count);
+            Assert.AreEqual(2, composite.InnerErrors.Length);
         }
 
         [Test]
@@ -44,13 +44,13 @@ namespace Tutan.Functional.Tests
         }
 
         [Test]
-        public void Inner_WhenSetViaInit_ReturnsInnerError()
+        public void Constructor_WithInnerError_StoresInnerInInnerErrors()
         {
             var inner = new Error("inner cause");
-            var outer = new Error("outer problem") { Inner = inner };
+            var outer = new Error("outer problem", inner);
 
-            Assert.IsNotNull(outer.Inner);
-            Assert.AreEqual("inner cause", outer.Inner.Message);
+            Assert.AreEqual(1, outer.InnerErrors.Length);
+            Assert.AreEqual("inner cause", outer.InnerErrors[0].Message);
         }
 
         [Test]
@@ -58,8 +58,7 @@ namespace Tutan.Functional.Tests
         {
             var error = new Error("simple");
 
-            Assert.IsNotNull(error.InnerErrors);
-            Assert.AreEqual(0, error.InnerErrors.Count);
+            Assert.AreEqual(0, error.InnerErrors.Length);
         }
 
         [Test]
@@ -69,7 +68,7 @@ namespace Tutan.Functional.Tests
 
             var composite = new Error(errors);
 
-            Assert.AreEqual(3, composite.InnerErrors.Count);
+            Assert.AreEqual(3, composite.InnerErrors.Length);
             Assert.AreEqual("a", composite.InnerErrors[0].Message);
             Assert.AreEqual("b", composite.InnerErrors[1].Message);
             Assert.AreEqual("c", composite.InnerErrors[2].Message);
@@ -117,7 +116,7 @@ namespace Tutan.Functional.Tests
         }
 
         [Test]
-        public void RecordEquality_SameMessage_AreEqual()
+        public void Equality_SameMessage_AreEqual()
         {
             var error1 = new Error("duplicate");
             var error2 = new Error("duplicate");

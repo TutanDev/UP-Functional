@@ -8,13 +8,13 @@ namespace Tutan.Functional
         public static async UniTask<Result<T>> TryAsync<T>(Func<UniTask<T>> f)
         {
             try { return Success(await f()); }
-            catch (Exception ex) { return new Error(ex.Message); }
+            catch (Exception ex) { return new Error(ex.ToString()); }
         }
 
         public static async UniTask<Result<Unit>> TryAsync(Func<UniTask> action)
         {
             try { await action(); return Success(Unit()); }
-            catch (Exception ex) { return new Error(ex.Message); }
+            catch (Exception ex) { return new Error(ex.ToString()); }
         }
     }
 }

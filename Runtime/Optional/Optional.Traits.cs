@@ -6,7 +6,8 @@ namespace Tutan.Functional
 {
     public static partial class OptionalExtensions
     {
-        #region Conversions
+        // ── Conversions ─────────────────────────────────────────
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> AsEnumerable<T>(this Optional<T> opt)
         {
@@ -18,11 +19,10 @@ namespace Tutan.Functional
             => opt.Match(
                 () => onNone(),
                 (t) => Success(t));
-        #endregion Conversions
 
 
+        // ── Monad ───────────────────────────────────────────────
 
-        #region Monad
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<R> Map<T, R>(this NoneType _, Func<T, R> f) => None;
 
@@ -38,7 +38,7 @@ namespace Tutan.Functional
         public static Optional<Func<T2, T3, R>> Map<T1, T2, T3, R>(this Optional<T1> opt, Func<T1, T2, T3, R> func)
             => opt.Map(func.CurryFirst());
 
-        // BIND
+        // bind
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<R> Bind<T, R>(this Optional<T> opt, Func<T, Optional<R>> f)
             => opt.Match(
@@ -48,11 +48,19 @@ namespace Tutan.Functional
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<R> Bind<T, R>(this Optional<T> opt, Func<T, IEnumerable<R>> func)
             => opt.AsEnumerable().Bind(func);
-        #endregion Monad
+
+        // state-passing (zero-alloc hot paths)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Optional<R> Map<T, TState, R>(this Optional<T> opt, TState state, Func<T, TState, R> f)
+            => opt.IsSome ? Some(f(opt._value, state)) : default;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Optional<R> Bind<T, TState, R>(this Optional<T> opt, TState state, Func<T, TState, Optional<R>> f)
+            => opt.IsSome ? f(opt._value, state) : default;
 
 
+        // ── Linq ────────────────────────────────────────────────
 
-        #region Linq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<R> Select<T, R>(this Optional<T> opt, Func<T, R> func)
             => opt.Map(func);
@@ -70,11 +78,10 @@ namespace Tutan.Functional
                (t) => bind(t).Match(
                    () => default,
                    (r) => Some(project(t, r))));
-        #endregion Linq
 
 
+        // ── Applicative ─────────────────────────────────────────
 
-        #region Applicative
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<R> Apply<T, R>(this Optional<Func<T, R>> opt, Optional<T> arg)
             => opt.Match(
@@ -122,6 +129,5 @@ namespace Tutan.Functional
         public static Optional<Func<T2, T3, T4, T5, T6, T7, T8, T9, R>> Apply<T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
            (this Optional<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, R>> opt, Optional<T1> arg)
            => Apply(opt.Map(F.CurryFirst), arg);
-        #endregion Applicative
     }
 }

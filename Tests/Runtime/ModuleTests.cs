@@ -95,7 +95,7 @@ namespace Tutan.Functional.Tests
             Result<int> result = Try(() => 42);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(42, result.ValueUnsafe);
+            Assert.AreEqual(42, result.ValueUnsafe());
         }
 
         // 9. Try (Func) - exception case returns Error result with message
@@ -105,7 +105,7 @@ namespace Tutan.Functional.Tests
             Result<int> result = Try<int>(() => throw new InvalidOperationException("test error"));
 
             Assert.IsTrue(result.IsError);
-            Assert.AreEqual("test error", result.ErrorUnsafe.Message);
+            StringAssert.Contains("test error", result.ErrorUnsafe().Message);
         }
 
         // 10. Try (Action) - success case returns Success(Unit)
@@ -126,7 +126,7 @@ namespace Tutan.Functional.Tests
             Result<Unit> result = Try(() => throw new InvalidOperationException("action failed"));
 
             Assert.IsTrue(result.IsError);
-            Assert.AreEqual("action failed", result.ErrorUnsafe.Message);
+            StringAssert.Contains("action failed", result.ErrorUnsafe().Message);
         }
 
         // 12. Curry 2-arity - curries function
@@ -217,8 +217,8 @@ namespace Tutan.Functional.Tests
             });
 
             Assert.IsTrue(result.IsError);
-            Assert.IsNotNull(result.ErrorUnsafe.Message);
-            Assert.IsTrue(result.ErrorUnsafe.Message.Length > 0);
+            Assert.IsNotNull(result.ErrorUnsafe().Message);
+            Assert.IsTrue(result.ErrorUnsafe().Message.Length > 0);
         }
     }
 }

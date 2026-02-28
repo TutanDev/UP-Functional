@@ -6,7 +6,8 @@ namespace Tutan.Functional
 {
     public static partial class ResultExtensions
     {
-        #region Conversions
+        // ── Conversions ─────────────────────────────────────────
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> AsEnumerable<T>(this Result<T> opt)
         {
@@ -18,12 +19,11 @@ namespace Tutan.Functional
             => result.Match(
                 (e) => default,
                 (t) => Some(t));
-        #endregion Conversions
 
 
+        // ── Monad ───────────────────────────────────────────────
 
-        #region Monad
-        // MAP
+        // map
         public static Result<R> Map<T, R>(this Result<T> result, Func<T, R> f)
             => result.Match(
                 onSuccess: s => Success(f(s)),
@@ -35,13 +35,11 @@ namespace Tutan.Functional
         public static Result<Func<T2, T3, R>> Map<T1, T2, T3, R>(this Result<T1> @this, Func<T1, T2, T3, R> func)
             => @this.Map(func.CurryFirst());
 
-
-        // FOREACH
+        // foreach
         public static Result<Unit> ForEach<T>(this Result<T> result, Action<T> action)
             => Map(result, action.ToFunc());
 
-
-        // BIND
+        // bind
         public static Result<R> Bind<T, R>(this Result<T> result, Func<T, Result<R>> f)
             => result.Match(
                 e => e,
@@ -50,11 +48,18 @@ namespace Tutan.Functional
         public static IEnumerable<R> Bind<T, R>(this Result<T> @this, Func<T, IEnumerable<R>> func)
             => @this.AsEnumerable().Bind(func);
 
-        #endregion Monad
+        // state-passing (zero-alloc hot paths)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Result<R> Map<T, TState, R>(this Result<T> result, TState state, Func<T, TState, R> f)
+            => result.IsSuccess ? Success(f(result._value, state)) : result._error;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Result<R> Bind<T, TState, R>(this Result<T> result, TState state, Func<T, TState, Result<R>> f)
+            => result.IsSuccess ? f(result._value, state) : result._error;
 
 
+        // ── Linq ────────────────────────────────────────────────
 
-        #region Linq
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Result<R> Select<T, R>(this Result<T> result, Func<T, R> f)
             => result.Map(f);
@@ -66,11 +71,10 @@ namespace Tutan.Functional
                (t) => bind(t).Match(
                    (e) => e,
                    (r) => Success(project(t, r))));
-        #endregion Linq
 
 
+        // ── Applicative ─────────────────────────────────────────
 
-        #region Applicative
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Result<R> Apply<T, R>(this Result<Func<T, R>> @this, Result<T> arg)
             => @this.Match(
@@ -118,6 +122,5 @@ namespace Tutan.Functional
         public static Result<Func<T2, T3, T4, T5, T6, T7, T8, T9, R>> Apply<T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
            (this Result<Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, R>> @this, Result<T1> arg)
            => Apply(@this.Map(F.CurryFirst), arg);
-        #endregion Applicative
     }
 }

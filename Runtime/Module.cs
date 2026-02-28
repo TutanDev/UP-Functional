@@ -33,21 +33,21 @@ namespace Tutan.Functional
         public static T Pipe<T>(this T input, Action<T> func) => Tee(func)(input);
 
 
-
         public static Result<T> Try<T>(Func<T> f)
         {
             try { return Success(f()); }
-            catch (Exception ex) { return new Error(ex.Message); }
+            catch (Exception ex) { return new Error(ex.ToString()); }
         }
 
         public static Result<Unit> Try(Action action)
         {
             try { action(); return Success(Unit()); }
-            catch (Exception ex) { return new Error(ex.Message); }
+            catch (Exception ex) { return new Error(ex.ToString()); }
         }
 
 
-        #region Curry
+        // ── Curry ───────────────────────────────────────────────
+
         public static Func<T1, Func<T2, R>> Curry<T1, T2, R>(this Func<T1, T2, R> func)
             => t1 => t2 => func(t1, t2);
 
@@ -74,7 +74,5 @@ namespace Tutan.Functional
 
         public static Func<T1, Func<T2, T3, T4, T5, T6, T7, T8, T9, R>> CurryFirst<T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
            (this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> @this) => t1 => (t2, t3, t4, t5, t6, t7, t8, t9) => @this(t1, t2, t3, t4, t5, t6, t7, t8, t9);
-
-        #endregion curry
     }
 }

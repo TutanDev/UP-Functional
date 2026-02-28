@@ -25,29 +25,33 @@ namespace Tutan.Functional
     {
         internal readonly T _value;
         internal readonly Error _error;
+        private readonly bool _isSuccess;
 
-        public T ValueUnsafe => _value;
-        public Error ErrorUnsafe => _error;
-
-        public bool IsSuccess { get; init; }
-        public bool IsError => !IsSuccess;
+        public bool IsSuccess => _isSuccess;
+        public bool IsError => !_isSuccess;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal Result(T data) 
-            => (IsSuccess, _value, _error) = (true, data, default);
+        internal Result(T data)
+            => (_isSuccess, _value, _error) = (true, data, default);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal Result(Error error) 
-            => (IsSuccess, _value, _error) = (false, default, error);
+        internal Result(Error error)
+            => (_isSuccess, _value, _error) = (false, default, error);
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public R Match<R>(Func<Error, R> onError, Func<T, R> onSuccess) => IsSuccess ? onSuccess(_value) : onError(_error);
+        public R Match<R>(Func<Error, R> onError, Func<T, R> onSuccess) => _isSuccess ? onSuccess(_value) : onError(_error);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Unit Match(Action<Error> onError, Action<T> onSuccess) => Match(onError.ToFunc(), onSuccess.ToFunc());
+        public Unit Match(Action<Error> onError, Action<T> onSuccess)
+        {
+            if (_isSuccess) onSuccess(_value);
+            else onError(_error);
+            return default;
+        }
 
 
-        public override string ToString() => IsSuccess ? $"Success: {_value}" : $"Error: {_error}";
+        public override string ToString() => _isSuccess ? $"Success: {_value}" : $"Error: {_error}";
         public static implicit operator Result<T>(T value) => Success(value);
         public static implicit operator Result<T>(Error error) => new(error);
     }

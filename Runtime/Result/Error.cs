@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,28 +7,80 @@ namespace Tutan.Functional
     public static partial class F
     {
         public static Error Error(string message) => new Error(message);
+        public static Error Error(string message, Error inner) => new Error(message, inner);
         public static Error Error(IEnumerable<Error> errors) => new Error(errors);
     }
 
-    public record Error(string Message)
+    /// <summary>
+    /// An immutable, zero-allocation error value (16 bytes on 64-bit).
+    /// <para>
+    /// <see cref="InnerErrors"/> returns a <see cref="ReadOnlySpan{T}"/> which cannot be
+    /// stored in class fields, used across async boundaries, or passed to LINQ without
+    /// first calling <c>.ToArray()</c>.
+    /// </para>
+    /// </summary>
+    public readonly struct Error : IEquatable<Error>
     {
-        public Error Inner { get; init; }
-        public IReadOnlyList<Error> InnerErrors { get; init; } = System.Array.Empty<Error>();
+        private readonly string _message;
+        private readonly Error[] _inner;
+
+        public string Message => _message;
+
+        /// <remarks>Returns a <see cref="ReadOnlySpan{T}"/>; cannot cross async boundaries.</remarks>
+        public ReadOnlySpan<Error> InnerErrors => _inner ?? Array.Empty<Error>();
+
+        private bool HasInner => _inner is { Length: > 0 };
+
+        public Error(string message)
+        {
+            _message = message;
+            _inner = null;
+        }
+
+        public Error(string message, Error inner)
+        {
+            _message = message;
+            _inner = new[] { inner };
+        }
 
         public Error(IEnumerable<Error> errors)
-            : this(string.Join("; ", errors.Select(e => e.Message)))
         {
-            InnerErrors = errors.ToArray();
+            var arr = errors.ToArray();
+            _message = string.Join("; ", arr.Select(e => e.Message));
+            _inner = arr;
         }
 
         public static implicit operator Error(string message) => new(message);
 
         public IEnumerable<Error> AsEnumerable()
-            => InnerErrors.Count > 0 ? InnerErrors : new[] { this };
+            => HasInner ? _inner : new[] { this };
 
-        public override string ToString()
-            => InnerErrors.Count > 0
-                ? string.Join("; ", InnerErrors.Select(e => e.Message))
-                : Message;
+        public override string ToString() => _message ?? string.Empty;
+
+        public bool Equals(Error other)
+            => _message == other._message && ErrorArraysEqual(_inner, other._inner);
+
+        public override bool Equals(object obj) => obj is Error other && Equals(other);
+
+        public override int GetHashCode()
+        {
+            var h = _message?.GetHashCode() ?? 0;
+            if (_inner != null)
+                h = h * 31 + _inner.Length;
+            return h;
+        }
+
+        public static bool operator ==(Error left, Error right) => left.Equals(right);
+        public static bool operator !=(Error left, Error right) => !left.Equals(right);
+
+        private static bool ErrorArraysEqual(Error[] a, Error[] b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+            if (a is null || b is null) return false;
+            if (a.Length != b.Length) return false;
+            for (var i = 0; i < a.Length; i++)
+                if (!a[i].Equals(b[i])) return false;
+            return true;
+        }
     }
 }

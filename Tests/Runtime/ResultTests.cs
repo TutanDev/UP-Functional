@@ -25,7 +25,7 @@ namespace Tutan.Functional.Tests
         public void Success_WithValue_StoresValue()
         {
             var result = Success("hello");
-            Assert.That(result.ValueUnsafe, Is.EqualTo("hello"));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo("hello"));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace Tutan.Functional.Tests
         public void Error_Result_StoresError()
         {
             Result<int> result = Error("boom");
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("boom"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("boom"));
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace Tutan.Functional.Tests
         {
             Result<int> result = 42;
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(42));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(42));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Tutan.Functional.Tests
         {
             Result<int> result = new Error("fail");
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("fail"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("fail"));
         }
 
         [Test]
@@ -116,17 +116,17 @@ namespace Tutan.Functional.Tests
         }
 
         [Test]
-        public void ValueUnsafe_Property_OnSuccess_ReturnsValue()
+        public void ValueUnsafe_OnSuccess_ReturnsValue()
         {
             var result = Success(99);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(99));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(99));
         }
 
         [Test]
-        public void ErrorUnsafe_Property_OnError_ReturnsError()
+        public void ErrorUnsafe_OnError_ReturnsError()
         {
             Result<int> result = Error("msg");
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("msg"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("msg"));
         }
 
         // ──────────────────────────────────────────────
@@ -481,6 +481,55 @@ namespace Tutan.Functional.Tests
         {
             var result = Success(1);
             Assert.Throws<InvalidOperationException>(() => result.ErrorUnsafe());
+        }
+
+        // ── State-passing Map / Bind (Result.Traits.cs) ───────────────
+
+        [Test]
+        public void Map_WithState_OnSuccess_TransformsValue()
+        {
+            var result = Success(4);
+            int factor = 5;
+            var mapped = result.Map(factor, static (v, f) => v * f);
+            Assert.That(mapped.IsSuccess, Is.True);
+            Assert.That(mapped.ValueUnsafe(), Is.EqualTo(20));
+        }
+
+        [Test]
+        public void Map_WithState_OnError_PropagatesError()
+        {
+            Result<int> result = Error("fail");
+            var mapped = result.Map(10, static (v, s) => v + s);
+            Assert.That(mapped.IsError, Is.True);
+            Assert.That(mapped.ErrorUnsafe().Message, Is.EqualTo("fail"));
+        }
+
+        [Test]
+        public void Bind_WithState_OnSuccess_FlatMaps()
+        {
+            var result = Success(6);
+            int offset = 4;
+            var bound = result.Bind(offset, static (v, o) => Success(v + o));
+            Assert.That(bound.IsSuccess, Is.True);
+            Assert.That(bound.ValueUnsafe(), Is.EqualTo(10));
+        }
+
+        [Test]
+        public void Bind_WithState_OnSuccess_CanReturnError()
+        {
+            var result = Success(1);
+            var bound = result.Bind("state", static (v, s) => (Result<int>)Error("computed"));
+            Assert.That(bound.IsError, Is.True);
+            Assert.That(bound.ErrorUnsafe().Message, Is.EqualTo("computed"));
+        }
+
+        [Test]
+        public void Bind_WithState_OnError_PropagatesError()
+        {
+            Result<int> result = Error("original");
+            var bound = result.Bind(99, static (v, s) => Success(v + s));
+            Assert.That(bound.IsError, Is.True);
+            Assert.That(bound.ErrorUnsafe().Message, Is.EqualTo("original"));
         }
     }
 }

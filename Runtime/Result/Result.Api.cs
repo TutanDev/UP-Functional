@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
 
-
 namespace Tutan.Functional
 {
     public static partial class ResultExtensions
@@ -15,7 +14,6 @@ namespace Tutan.Functional
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Result<R> Then<T, R>(this Result<T> result, Func<T, Result<R>> func) => result.Bind(func);
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Or<T>(this Result<T> result, T fallback)
             => result.Match(_ => fallback, t => t);
@@ -23,18 +21,16 @@ namespace Tutan.Functional
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T OrElse<T>(this Result<T> result, Func<T> fallback)
             => result.Match(e => fallback(), t => t);
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T OrElse<T>(this Result<T> result, Func<Error, T> fallback)
             => result.Match(e => fallback(e), t => t);
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Result<T> Filter<T>(this Result<T> result, Func<T, bool> predicate)
             => result.Match(
                 onError: e => new Result<T>(e),
                 onSuccess: v => predicate(v) ? result : new Result<T>(Error("Predicate not satisfied")));
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSuccess<T>(this Result<T> result, out T value)

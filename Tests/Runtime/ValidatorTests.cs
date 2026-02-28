@@ -22,7 +22,7 @@ namespace Tutan.Functional.Tests
             var result = validator(42);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(42, result.ValueUnsafe);
+            Assert.AreEqual(42, result.ValueUnsafe());
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Tutan.Functional.Tests
             var result = validator(-3);
 
             Assert.IsTrue(result.IsError);
-            Assert.AreEqual("Must be positive", result.ErrorUnsafe.Message);
+            Assert.AreEqual("Must be positive", result.ErrorUnsafe().Message);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Tutan.Functional.Tests
             var result = validator(7);
 
             Assert.IsTrue(result.IsError);
-            Assert.AreEqual("Must be even", result.ErrorUnsafe.Message);
+            Assert.AreEqual("Must be even", result.ErrorUnsafe().Message);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Tutan.Functional.Tests
             var result = validator(-3);
 
             Assert.IsTrue(result.IsError);
-            Assert.AreEqual("Must be positive", result.ErrorUnsafe.Message);
+            Assert.AreEqual("Must be positive", result.ErrorUnsafe().Message);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Tutan.Functional.Tests
             var result = validator(42);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(42, result.ValueUnsafe);
+            Assert.AreEqual(42, result.ValueUnsafe());
         }
 
         [Test]
@@ -80,9 +80,9 @@ namespace Tutan.Functional.Tests
             var resultFail = validator(200);
 
             Assert.IsTrue(resultPass.IsSuccess);
-            Assert.AreEqual(50, resultPass.ValueUnsafe);
+            Assert.AreEqual(50, resultPass.ValueUnsafe());
             Assert.IsTrue(resultFail.IsError);
-            Assert.AreEqual("Must be less than 100", resultFail.ErrorUnsafe.Message);
+            Assert.AreEqual("Must be less than 100", resultFail.ErrorUnsafe().Message);
         }
 
         // --- HarvestErrors tests ---
@@ -95,7 +95,7 @@ namespace Tutan.Functional.Tests
             var result = validator(42);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(42, result.ValueUnsafe);
+            Assert.AreEqual(42, result.ValueUnsafe());
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace Tutan.Functional.Tests
             var result = validator(7); // odd, but positive and < 100
 
             Assert.IsTrue(result.IsError);
-            Assert.AreEqual("Must be even", result.ErrorUnsafe.Message);
+            Assert.AreEqual("Must be even", result.ErrorUnsafe().Message);
         }
 
         [Test]
@@ -120,8 +120,8 @@ namespace Tutan.Functional.Tests
 
             Assert.IsTrue(result.IsError);
 
-            var innerErrors = result.ErrorUnsafe.InnerErrors;
-            Assert.AreEqual(2, innerErrors.Count);
+            var innerErrors = result.ErrorUnsafe().InnerErrors;
+            Assert.AreEqual(2, innerErrors.Length);
             Assert.AreEqual("Must be positive", innerErrors[0].Message);
             Assert.AreEqual("Must be even", innerErrors[1].Message);
         }
@@ -134,7 +134,7 @@ namespace Tutan.Functional.Tests
             var result = validator(42);
 
             Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(42, result.ValueUnsafe);
+            Assert.AreEqual(42, result.ValueUnsafe());
         }
 
         [Test]
@@ -146,9 +146,9 @@ namespace Tutan.Functional.Tests
             var resultFail = validator(200);
 
             Assert.IsTrue(resultPass.IsSuccess);
-            Assert.AreEqual(50, resultPass.ValueUnsafe);
+            Assert.AreEqual(50, resultPass.ValueUnsafe());
             Assert.IsTrue(resultFail.IsError);
-            Assert.AreEqual("Must be less than 100", resultFail.ErrorUnsafe.Message);
+            Assert.AreEqual("Must be less than 100", resultFail.ErrorUnsafe().Message);
         }
 
         [Test]
@@ -161,7 +161,7 @@ namespace Tutan.Functional.Tests
 
             Assert.IsTrue(result.IsError);
 
-            var message = result.ErrorUnsafe.Message;
+            var message = result.ErrorUnsafe().Message;
             StringAssert.Contains("Must be positive", message);
             StringAssert.Contains("Must be even", message);
         }

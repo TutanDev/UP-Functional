@@ -135,7 +135,7 @@ namespace Tutan.Functional.Tests
             var opt = Some(10);
             var result = opt.ToResult(() => new Error("missing"));
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.ValueUnsafe, Is.EqualTo(10));
+            Assert.That(result.ValueUnsafe(), Is.EqualTo(10));
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace Tutan.Functional.Tests
             Optional<int> opt = None;
             var result = opt.ToResult(() => new Error("missing"));
             Assert.That(result.IsError, Is.True);
-            Assert.That(result.ErrorUnsafe.Message, Is.EqualTo("missing"));
+            Assert.That(result.ErrorUnsafe().Message, Is.EqualTo("missing"));
         }
 
         [Test]
@@ -460,6 +460,53 @@ namespace Tutan.Functional.Tests
             var result = opt.Traverse(x => Enumerable.Range(1, x)).ToList();
             Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].IsNone, Is.True);
+        }
+
+        // ── State-passing Map / Bind (Optional.Traits.cs) ─────────────
+
+        [Test]
+        public void Map_WithState_Some_TransformsValue()
+        {
+            var opt = Some(5);
+            int threshold = 3;
+            var result = opt.Map(threshold, static (v, t) => v > t);
+            Assert.That(result.IsSome, Is.True);
+            Assert.That(result.Match(() => false, v => v), Is.True);
+        }
+
+        [Test]
+        public void Map_WithState_None_ReturnsNone()
+        {
+            Optional<int> opt = None;
+            var result = opt.Map(10, static (v, t) => v + t);
+            Assert.That(result.IsNone, Is.True);
+        }
+
+        [Test]
+        public void Bind_WithState_Some_FlatMaps()
+        {
+            var opt = Some(10);
+            int multiplier = 3;
+            var result = opt.Bind(multiplier, static (v, m) => Some(v * m));
+            Assert.That(result.IsSome, Is.True);
+            Assert.That(result.Match(() => -1, v => v), Is.EqualTo(30));
+        }
+
+        [Test]
+        public void Bind_WithState_Some_CanReturnNone()
+        {
+            var opt = Some(1);
+            int threshold = 5;
+            var result = opt.Bind(threshold, static (v, t) => v > t ? Some(v) : (Optional<int>)None);
+            Assert.That(result.IsNone, Is.True);
+        }
+
+        [Test]
+        public void Bind_WithState_None_ReturnsNone()
+        {
+            Optional<int> opt = None;
+            var result = opt.Bind(99, static (v, s) => Some(v + s));
+            Assert.That(result.IsNone, Is.True);
         }
     }
 }

@@ -34,22 +34,18 @@ namespace Tutan.Functional
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<R> Then<T, R>(this Optional<T> opt, Func<T, Optional<R>> func) => opt.Bind(func);
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Or<T>(this Optional<T> opt, T fallback) => opt.Match(() => fallback, t => t);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T OrElse<T>(this Optional<T> opt, Func<T> fallback) => opt.Match(() => fallback(), t => t);
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<T> Filter<T>(this Optional<T> opt, Func<T, bool> predicate) => opt.IsSome && predicate(opt._value) ? opt : default;
 
-        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Optional<T> ToOptional<T>(this T? nullable) where T : struct
             => nullable.HasValue ? Some(nullable.Value) : default;
-
 
         public static IEnumerable<Optional<R>> Traverse<T, R>(this Optional<T> @this, Func<T, IEnumerable<R>> func)
          => @this.Match(
