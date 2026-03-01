@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · **Async** · [API Reference](API-Reference)
+
+---
+
 # Async Patterns
 
 Every synchronous operator on `Optional<T>` and `Result<T>` has an async counterpart built on **UniTask**. Async pipelines look structurally identical to synchronous ones.
@@ -241,7 +245,3 @@ public async UniTask<Result<SaveData>> LoadAndValidateAsync(string path)
 - Use `ThenAsync` to keep async chains flat — avoid nesting `await` calls inside lambdas when you can chain instead.
 - Use `Then` (sync overload on `UniTask<...>`) to interleave cheap synchronous transformations without adding extra `async/await` state machines.
 - Always `await` the final `UniTask` — forgetting to await silently swallows errors.
-
----
-
-[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · **Async** · [API Reference](API-Reference)

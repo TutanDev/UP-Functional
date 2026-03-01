@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · **Validation** · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)
+
+---
+
 # Validation
 
 The validation API lets you compose individual field-level rules into a single validator that either stops at the first failure (`FailFast`) or collects every failure before reporting (`HarvestErrors`).
@@ -193,7 +197,3 @@ Validator<PlayerConfig> fullValidation =
 - Prefer `FailFast` in hot paths or user-facing interactions where only the first error matters.
 - Keep each `Validator<T>` focused on a single rule — they compose cleanly and are easy to unit-test individually.
 - Use `e.AsEnumerable()` on the error from `HarvestErrors` to iterate individual rule failures for display.
-
----
-
-[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · **Validation** · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)

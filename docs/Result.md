@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · [Optional](Optional) · **Result** · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)
+
+---
+
 # Result in Unity
 
 `Result<T>` represents the outcome of an operation:
@@ -103,7 +107,3 @@ public class PlayerBootstrap : MonoBehaviour
 - Use `Result<T>` when you need to explain **why** something failed.
 - Return `Optional<T>` for "not found is normal" cases, and `Result<T>` for true failure cases.
 - Prefer `Match` at system boundaries (UI, logs, game state transitions) to centralize error handling.
-
----
-
-[Home](index) · [Why this library](Functional) · [Optional](Optional) · **Result** · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)

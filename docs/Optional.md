@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · **Optional** · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)
+
+---
+
 # Optional in Unity
 
 `Optional<T>` represents a value that might exist (`Some`) or might be missing (`None`).
@@ -112,7 +116,3 @@ public static class SaveReader
 - Use `Optional<T>` for values that are truly optional (component may be absent, save field may be unset, query may return nothing).
 - Keep `Optional` at API boundaries where missing data is expected.
 - Prefer `Match`, `Or`, and `Then` over `ValueUnsafe` unless you've already guaranteed `Some`.
-
----
-
-[Home](index) · [Why this library](Functional) · **Optional** · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)

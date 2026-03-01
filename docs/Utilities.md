@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · **Utilities** · [Async](Async) · [API Reference](API-Reference)
+
+---
+
 # Utilities — F module & extension methods
 
 This document covers the utility belt that underpins the library: the `F` static module, `IEnumerable` extensions, and Unity-specific lookup helpers.
@@ -318,7 +322,3 @@ Func<T, Unit> ToFunc<T>(this Action<T> action)
 ```
 
 Used internally by `ForEach`, `Then(Action<T>)`, and `Tee`. Rarely called directly.
-
----
-
-[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · **Utilities** · [Async](Async) · [API Reference](API-Reference)

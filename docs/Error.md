@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · **Error** · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)
+
+---
+
 # Error
 
 `Error` is an immutable value type (16 bytes on 64-bit) that carries a human-readable message and optional nested or composite inner errors. It is the failure payload carried by `Result<T>`.
@@ -154,7 +158,3 @@ configResult.Match(
 `Error` implements `IEquatable<Error>`. Two errors are equal when their `Message` and inner error arrays are equal (deep comparison).
 
 `ToString()` returns `Message` (or `string.Empty` for a default `Error`).
-
----
-
-[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · **Error** · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)

@@ -2,25 +2,38 @@
 title: com.tutan.functional
 ---
 
-# com.tutan.functional
+# ⚡ com.tutan.functional
 
-A functional programming toolkit for Unity that gives you explicit, composable representations of optionality and failure — so you can stop writing defensive `null` checks and scattered `try/catch` blocks.
+> Stop writing defensive `null` checks and scattered `try/catch` blocks.
+> Make missing values and failures **impossible to ignore**.
 
-## What it solves
+A functional programming toolkit for Unity. Every operation either succeeds or
+fails — explicitly, as a value, composable in a pipeline.
 
-Unity projects routinely suffer from null-reference exceptions, exception-driven control flow, and validation that surfaces only one error at a time. This library replaces those patterns with **railway-oriented programming**: every step in a data pipeline is either on the happy track or the error track, handled explicitly at compile time.
+---
 
-Core types: `Optional<T>` for values that might be absent, `Result<T>` for operations that might fail, and `Error` for rich, composable failure payloads.
+## ✨ Features
 
-## Documentation
-
-| Guide | Description |
+| | |
 |---|---|
-| [Why this library](Functional) | The problem, the approach, quick install |
-| [Optional\<T\>](Optional) | `Optional<T>` — construction, `Then`, `Or`, `Filter`, `Match`, Unity examples |
-| [Result\<T\>](Result) | `Result<T>` — construction, `Then`, `Filter`, `Match`, pipeline patterns, Unity examples |
-| [Error](Error) | `Error` — simple, nested, composite construction; logging; converting exceptions |
-| [Validation](Validation) | `Validator<T>`, `FailFast`, `HarvestErrors`, combining validators, Unity examples |
-| [Utilities](Utilities) | `F` module (`Try`, `Tee`, `Pipe`, `Curry`, `CurryFirst`), `IEnumerable` extensions, Unity lookup helpers |
-| [Async](Async) | `ThenAsync`, `MatchAsync`, `TryAsync`, mixing sync/async pipelines, UniTask patterns |
-| [API Reference](API-Reference) | Full scannable reference — every public member with signature and one-line description |
+| 🎯 **Explicit optionality** | `Optional<T>` replaces `null` — handle absence at compile time, not at runtime |
+| 💥 **Explicit failure** | `Result<T>` replaces exceptions — failures become values you chain and transform |
+| 🔗 **Composable pipelines** | `Then`, `Map`, `Bind`, `Match` — no more nested conditionals |
+| ✅ **Accumulating validation** | `Validator<T>` collects every failure before reporting, not just the first |
+| ⚡ **Async parity** | Every operator has a `UniTask` counterpart — async pipelines look identical to sync |
+| 🛡️ **Unity-aware** | Handles Unity's fake-null problem; includes `GetComponent`, `Resources` helpers |
+
+---
+
+## 📚 Documentation
+
+| | Guide | What it covers |
+|---|---|---|
+| 📖 | [Why this library](Functional) | The problem, the approach, quick install |
+| ❓ | [Optional\<T\>](Optional) | Construction, `Then`, `Or`, `Filter`, `Match`, Unity examples |
+| ⚠️ | [Result\<T\>](Result) | Construction, `Then`, `Filter`, `Match`, pipeline patterns |
+| 🔴 | [Error](Error) | Simple, nested, composite errors; logging; converting exceptions |
+| ✅ | [Validation](Validation) | `Validator<T>`, `FailFast`, `HarvestErrors`, combining validators |
+| 🔧 | [Utilities](Utilities) | `F` module, `IEnumerable` extensions, Unity lookup helpers |
+| ⚡ | [Async](Async) | `ThenAsync`, `TryAsync`, mixing sync/async pipelines |
+| 📋 | [API Reference](API-Reference) | Every public member — signature and one-line description |

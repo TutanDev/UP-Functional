@@ -1,3 +1,7 @@
+[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · **API Reference**
+
+---
+
 # API Reference
 
 Scannable reference for every public member. Signatures are simplified (type constraints omitted unless essential). See the linked guides for usage examples.
@@ -345,7 +349,3 @@ A function that validates a value and returns `Success(t)` or an `Error`.
 | `Optional<T> LookupComponent<T>(this GameObject go) where T : Component` | Safe `TryGetComponent`; `None` when null/destroyed or component absent |
 | `Optional<Transform> LookupParent(this Transform t)` | Safe parent access; `None` when no parent or destroyed |
 | `Optional<T> Lookup<K,T>(this IDictionary<K,T> dict, K key)` | Safe dictionary access; `None` on missing key |
-
----
-
-[Home](index) · [Why this library](Functional) · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · **API Reference**

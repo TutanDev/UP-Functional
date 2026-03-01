@@ -1,3 +1,7 @@
+[Home](index) · **Why this library** · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)
+
+---
+
 # com.tutan.functional
 
 A functional programming toolkit for Unity. It gives you explicit, composable representations of optionality and failure so you can stop writing defensive `if (x == null)` guards and `try/catch` blocks scattered across your codebase.
@@ -79,7 +83,3 @@ using static Tutan.Functional.F;   // brings Some, None, Success, Try, etc. into
 | [Utilities](Utilities) | `F` module (`Try`, `Tee`, `Pipe`, `Curry`, `CurryFirst`), `IEnumerable` extensions, Unity lookup helpers |
 | [Async](Async) | `ThenAsync`, `MatchAsync`, `TryAsync`, mixing sync/async pipelines, UniTask patterns |
 | [API Reference](API-Reference) | Full scannable reference — every public member with signature and one-line description |
-
----
-
-[Home](index) · **Why this library** · [Optional](Optional) · [Result](Result) · [Error](Error) · [Validation](Validation) · [Utilities](Utilities) · [Async](Async) · [API Reference](API-Reference)
