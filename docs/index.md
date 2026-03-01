@@ -2,7 +2,7 @@
 title: com.tutan.functional
 ---
 
-# ⚡ com.tutan.functional
+# ⚡ Functional
 
 > Stop writing defensive `null` checks and scattered `try/catch` blocks.
 > Make missing values and failures **impossible to ignore**.

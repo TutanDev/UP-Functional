@@ -2,7 +2,7 @@
 
 ---
 
-# com.tutan.functional
+# Functional
 
 A functional programming toolkit for Unity. It gives you explicit, composable representations of optionality and failure so you can stop writing defensive `if (x == null)` guards and `try/catch` blocks scattered across your codebase.
 
@@ -72,14 +72,15 @@ using static Tutan.Functional.F;   // brings Some, None, Success, Try, etc. into
 
 ---
 
-## Navigation
+## 📚 Documentation
 
-| Document | What it covers |
-|---|---|
-| [Optional](Optional) | `Optional<T>` — construction, `Then`, `Or`, `Filter`, `Match`, Unity examples |
-| [Result](Result) | `Result<T>` — construction, `Then`, `Filter`, `Match`, pipeline patterns, Unity examples |
-| [Error](Error) | `Error` — simple, nested, composite construction; logging; converting exceptions |
-| [Validation](Validation) | `Validator<T>`, `FailFast`, `HarvestErrors`, combining validators, Unity examples |
-| [Utilities](Utilities) | `F` module (`Try`, `Tee`, `Pipe`, `Curry`, `CurryFirst`), `IEnumerable` extensions, Unity lookup helpers |
-| [Async](Async) | `ThenAsync`, `MatchAsync`, `TryAsync`, mixing sync/async pipelines, UniTask patterns |
-| [API Reference](API-Reference) | Full scannable reference — every public member with signature and one-line description |
+| | Guide | What it covers |
+|---|---|---|
+| 📖 | [Why this library](Functional) | The problem, the approach, quick install |
+| ❓ | [Optional\<T\>](Optional) | Construction, `Then`, `Or`, `Filter`, `Match`, Unity examples |
+| ⚠️ | [Result\<T\>](Result) | Construction, `Then`, `Filter`, `Match`, pipeline patterns |
+| 🔴 | [Error](Error) | Simple, nested, composite errors; logging; converting exceptions |
+| ✅ | [Validation](Validation) | `Validator<T>`, `FailFast`, `HarvestErrors`, combining validators |
+| 🔧 | [Utilities](Utilities) | `F` module, `IEnumerable` extensions, Unity lookup helpers |
+| ⚡ | [Async](Async) | `ThenAsync`, `TryAsync`, mixing sync/async pipelines |
+| 📋 | [API Reference](API-Reference) | Every public member — signature and one-line description |
